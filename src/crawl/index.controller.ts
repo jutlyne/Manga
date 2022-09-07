@@ -21,6 +21,7 @@ class Crawl {
 
   async scrape(req, res) {
     const dataRes = [];
+
 		for await (let url of this.crawlListMangas(this.defaultPageUrl)) {
       let manga = await this.scrapeManga(url);
       dataRes.push(manga);

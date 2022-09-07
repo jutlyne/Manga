@@ -1,15 +1,18 @@
-import { Router, Request, Response } from 'express';
+import { ObjectId } from "mongodb";
 
-const router: Router = Router();
+export default class Manga {
+  constructor(
+    public name: string,
+    public status: number,
+    public author: string,
+    public views: string,
+    public image: string,
+    public content: string,
+    public totalVotes: string,
+    public rate: string,
+    public updatedAt: string,
+    public id?: ObjectId
+  ) {
 
-router.get('/', (req: Request, res: Response) => {
-    res.send('Hello, World!');
-});
-
-router.get('/:name', (req: Request, res: Response) => {
-    let { name } = req.params;
-
-    res.send(`Hello, ${name}!`);
-});
-
-export const WelcomeController: Router = router;
+  }
+}
