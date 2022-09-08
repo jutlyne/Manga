@@ -1,6 +1,6 @@
 import routes from './App';
 import * as http from 'http';
-import * as express from 'express';
+import express from 'express';
 import * as mongoDB from 'mongodb';
 import { connectToDatabase } from './connect/database';
 
@@ -13,7 +13,7 @@ class Server {
   }
 
   public config(): void {
-    const port = process.env.PORT || 3001;
+    const port = process.env.PORT || 3000;
 
     this.app.set('port', port);
     this.app.use(express.json());
