@@ -22,14 +22,17 @@ class Server {
   public config(): void {
     const port = process.env.PORT || 3000;
     const redisStoreSecret: any = process.env.REDIS_STORE_SECRET;
+    const redisStoreHost: any = process.env.REDIS_STORE_HOST;
+    const redisStorePort: any = process.env.REDIS_STORE_PORT || 6379;
+    const redisStoreTtl: any = process.env.REDIS_STORE_TTL || 260;
     const redisStore = connectRedis(session);
     const client  = redis.createClient();
 
     this.app.use(session({
       store: new redisStore({
-        host: 'localhost',
-        port: 6379,
-        ttl: 260,
+        host: redisStoreHost,
+        port: redisStorePort,
+        ttl: redisStoreTtl,
         client: client
       }),
       secret: redisStoreSecret,
