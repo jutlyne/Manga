@@ -1,18 +1,5 @@
-import { collections } from "..";
-import CrawlService from "./crawl.service";
-
-interface Manga {
-	name: string;
-	updatedAt: string;
-	status?: string;
-	author?: string;
-	categories?: object;
-	views?: string;
-	image?: string;
-	content?: string;
-	totalVotes?: string;
-	rate?: string;
-}
+import { collections } from '..';
+import CrawlService from './crawl.service';
 
 export class Crawl {
   async scrape(req, res) {
@@ -32,8 +19,8 @@ export class Crawl {
       const result = await collections.manga.insertMany(dataRes);
 
       result
-          ? res.status(201).json(dataRes)
-          : res.status(500).send('Failed to create a new manga.');
+        ? res.status(201).json(dataRes)
+        : res.status(500).json('Failed to create a new manga.');
     } catch (error) {
       console.error(error);
       res.status(400).send(error.message);
