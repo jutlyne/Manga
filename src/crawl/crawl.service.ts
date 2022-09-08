@@ -24,7 +24,7 @@ class CrawlService {
     const links = $('.ModuleContent .items .item').get();
 
     for (let link of links) {
-      const href = $(link).find('figure.clearfix .image a').attr('href');
+      const href: any = $(link).find('figure.clearfix .image a').attr('href');
       const mangaPageUrl = new URL(href, url).toString();
 
       if (mangaPageUrl) {
@@ -48,7 +48,7 @@ class CrawlService {
     const rate = $('.col-info .mrt5 span span:first-child').text();
 
     //crawl image and upload this
-    const imageUrl = $('.detail-info .col-image img').attr('src');
+    const imageUrl: any = $('.detail-info .col-image img').attr('src');
     const image = await this.scrapeImage(imageUrl, url);
     // const categories = $('.list-info .kind p').get();
     const manga: Manga = {
