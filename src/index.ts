@@ -1,18 +1,38 @@
-import app from './App';
-import * as mongoDB from "mongodb";
+import routes from './App';
+import * as http from 'http';
+import * as express from 'express';
+import * as mongoDB from 'mongodb';
 import { connectToDatabase } from './connect/database';
 
-const port = process.env.PORT || 3001;
+class Server {
+  public app: express.Application;
 
-connectToDatabase()
-  .then(() => {
-    app.listen(port, (err) => {
-      if (err) {
-        return console.log(err)
-      }
+  constructor() {
+    this.app = express();
+    this.config();
+  }
 
-      return console.log(`server is listening on ${port}`)
-    })
-  })
+  public config(): void {
+    const port = process.env.PORT || 3001;
+
+    this.app.set('port', port);
+    this.app.use(express.json());
+    routes(this.app)
+  }
+
+  public start(): void {
+    connectToDatabase()
+      .then(() => {
+        const server = http.createServer(this.app);
+
+        server.listen(this.app.get('port'), () => {
+          console.log('Server listening in port 3000');
+        });
+      })
+  }
+}
+
+const server = new Server();
+server.start();
 
 export const collections: { manga?: mongoDB.Collection } = {}
