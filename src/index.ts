@@ -17,6 +17,7 @@ class Server {
 
     this.app.set('port', port);
     this.app.use(express.json());
+    this.app.use(express.urlencoded({extended: true}));
     routes(this.app)
   }
 
