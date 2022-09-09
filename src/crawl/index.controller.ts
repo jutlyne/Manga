@@ -3,10 +3,6 @@ import { Request, Response } from 'express';
 import CrawlService from './crawl.service';
 
 export class Crawl {
-  async login(req: Request, res: Response) {
-    res.json(req.body);
-  }
-
   async scrape(req: Request, res: Response) {
     const dataRes = [];
     const defaultPageUrl = process.env.CRAWL_DOMAIN;
