@@ -1,7 +1,7 @@
-import init from './init';
+import initPassport from './init';
 import middleware from './middleware';
 
 export {
-  init,
+  initPassport,
   middleware
 }

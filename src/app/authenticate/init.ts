@@ -4,12 +4,12 @@ import { Strategy } from 'passport-local';
 import authenticationMiddleware from './middleware';
 
 const saltRounds = 10
-const myPlaintextPassword = 'my-password'
+const myPlaintextPassword = 'password'
 const salt = bcrypt.genSaltSync(saltRounds)
 const passwordHash = bcrypt.hashSync(myPlaintextPassword, salt)
 
 const user = {
-  username: 'test-user',
+  username: 'username',
   passwordHash,
   id: 1
 }
