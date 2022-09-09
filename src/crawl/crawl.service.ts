@@ -2,6 +2,9 @@ import cheerio from 'cheerio';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import { imgurClient } from '../config';
+import { collections } from '..';
+import { AlbumData } from 'imgur/lib/common/types';
 
 interface Manga {
 	name: string;
@@ -49,7 +52,9 @@ class CrawlService {
 
     //crawl image and upload this
     const imageUrl: any = $('.detail-info .col-image img').attr('src');
-    const image = await this.scrapeImage(imageUrl, url);
+    const albumHash: any = await this.findOrCreateAlbumImgur('list-manga');
+    const image = await this.scrapeImage(imageUrl, url, albumHash);
+
     // const categories = $('.list-info .kind p').get();
     const manga: Manga = {
       name: mangaName,
@@ -66,12 +71,49 @@ class CrawlService {
     return manga;
   }
 
-  protected async scrapeImage(url: string, baseUrl: string) {
+  protected async scrapeImage(url: string, baseUrl: string, album: string) {
 		const imageUrl = new URL(url, baseUrl).toString();
-		const imagePath = await this.downloadFile(imageUrl, 'image');
+		const imagePath = await this.uploadFileImgur(imageUrl, 'manga', album);
 
 		return imagePath;
 	}
+
+  protected async uploadFileImgur(url: string, dir: string, album: string) {
+    const filePath = path.join(dir, path.basename(url));
+
+    const response = await imgurClient.upload({
+      image: url,
+      album: album,
+      type: 'stream',
+      title: 'manga',
+      description: filePath
+    });
+
+    return response?.data.link;
+  }
+
+  protected async findOrCreateAlbumImgur(title: string) {
+    try {
+      const query = {title};
+      const albumImgur: any = await collections?.albumImgur?.findOne(query);
+
+      if (albumImgur) {
+        return albumImgur?.deletehash;
+      }
+
+      const newAlbumImgur = await imgurClient.createAlbum(title);
+      const result = await collections?.albumImgur?.insertOne(newAlbumImgur?.data as AlbumData);
+
+      if (result) {
+        return newAlbumImgur?.data?.deletehash;
+      }
+
+    } catch (error: any) {
+      console.error(error);
+
+      return error?.message
+    }
+  }
 
 	protected async downloadFile(url: string, dir: string) {
 		const response = await axios.get(url, {

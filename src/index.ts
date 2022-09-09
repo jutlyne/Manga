@@ -3,8 +3,8 @@ import * as http from 'http';
 import express from 'express';
 import * as mongoDB from 'mongodb';
 import cors from 'cors';
-import { corsOptions } from './config/cors';
-import { connectToDatabase } from './connect/database';
+import { corsOptions } from './config';
+import { connectToDatabase } from './database';
 import passport from 'passport';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
@@ -66,4 +66,4 @@ class Server {
 const server = new Server();
 server.start();
 
-export const collections: { manga?: mongoDB.Collection } = {}
+export const collections: { manga?: mongoDB.Collection, albumImgur?: mongoDB.Collection } = {}
