@@ -3,7 +3,7 @@ import connectRedis from 'connect-redis';
 import * as redis from 'redis';
 import { Application } from 'express';
 
-const redisSession = async (server: Application) => {
+export default async (server: Application) => {
   const redisName: string = process.env.REDIS_STORE_NAME || 'session';
   const redisStoreSecret: any = process.env.REDIS_STORE_SECRET;
   const redisStoreHost: any = process.env.REDIS_STORE_HOST;
@@ -43,5 +43,3 @@ const redisSession = async (server: Application) => {
       );
     });
 }
-
-export { redisSession }
