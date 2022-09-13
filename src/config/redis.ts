@@ -20,7 +20,7 @@ export default async (server: Application) => {
           host: redisStoreHost,
           port: redisStorePort,
           ttl: redisStoreTtl,
-          client: client
+          client
         }),
         secret: redisStoreSecret,
         resave: false,

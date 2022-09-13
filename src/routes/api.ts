@@ -17,13 +17,16 @@ export default class apiRoutes {
 
   protected registerRoutes(): void {
     this.router.get('/', this.controller.scrape);
+    this.router.get('/login', this.controller.login);
     this.router.post(
       '/login',
       this.formData.none(),
       validationLogin,
-      passport.authenticate('local'), (req: Request, res: Response) => {
-        res.json(req.user)
-      }
-    );
+      passport.authenticate('local', {
+        failureRedirect: '/api/login',
+        successRedirect: '/api',
+      }),
+      (req: Request, res: Response) => {}
+    )
   }
 }

@@ -26,7 +26,7 @@ class CrawlService {
     const $ = cheerio.load(html);
     const links = $('.ModuleContent .items .item').get();
 
-    for (let link of links) {
+    for (const link of links) {
       const href: any = $(link).find('figure.clearfix .image a').attr('href');
       const mangaPageUrl = new URL(href, url).toString();
 
@@ -50,7 +50,7 @@ class CrawlService {
     const totalVotes = $('.col-info .mrt5 span span:last-child').text();
     const rate = $('.col-info .mrt5 span span:first-child').text();
 
-    //crawl image and upload this
+    // crawl image and upload this
     const imageUrl: any = $('.detail-info .col-image img').attr('src');
     const albumHash: any = await this.findOrCreateAlbumImgur('list-manga');
     const image = await this.scrapeImage(imageUrl, url, albumHash);
@@ -83,7 +83,7 @@ class CrawlService {
 
     const response = await imgurClient.upload({
       image: url,
-      album: album,
+      album,
       type: 'stream',
       title: 'manga',
       description: filePath

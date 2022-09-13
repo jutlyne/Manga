@@ -7,6 +7,7 @@ import { corsOptions, redisSession } from './config';
 import { connectToDatabase } from './database';
 import passport from 'passport';
 import * as authentication from './app/authenticate';
+import path from 'path';
 
 class Server {
   public app: express.Application;
@@ -32,6 +33,11 @@ class Server {
     // config body parse using express
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+
+    // setting the view engine
+    this.app.set('views', path.join(__dirname, 'views'));
+    // setting for the root path for views directory
+    this.app.set('view engine', 'ejs');
 
     // add route
     routes(this.app);

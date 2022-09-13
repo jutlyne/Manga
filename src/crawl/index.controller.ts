@@ -3,6 +3,10 @@ import { Request, Response } from 'express';
 import CrawlService from './crawl.service';
 
 export class Crawl {
+  async login (req: Request, res: Response) {
+    res.render('auth/login');
+  }
+
   async scrape(req: Request, res: Response) {
     const dataRes = [];
     const defaultPageUrl = process.env.CRAWL_DOMAIN;
@@ -12,8 +16,8 @@ export class Crawl {
     }
 
     try {
-      for await (let url of CrawlService.crawlListMangas(defaultPageUrl)) {
-        let manga = await CrawlService.scrapeManga(url);
+      for await (const url of CrawlService.crawlListMangas(defaultPageUrl)) {
+        const manga = await CrawlService.scrapeManga(url);
         dataRes.push(manga);
       }
 
