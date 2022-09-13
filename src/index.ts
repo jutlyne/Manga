@@ -3,13 +3,11 @@ import * as http from 'http';
 import express from 'express';
 import * as mongoDB from 'mongodb';
 import cors from 'cors';
-import { corsOptions } from './config/cors';
-import { connectToDatabase } from './connect/database';
+import { corsOptions, redisSession } from './config';
+import { connectToDatabase } from './database';
 import passport from 'passport';
-import session from 'express-session';
-import connectRedis from 'connect-redis';
 import * as authentication from './app/authenticate';
-import * as redis from 'redis';
+import path from 'path';
 
 class Server {
   public app: express.Application;
@@ -19,36 +17,33 @@ class Server {
     this.config();
   }
 
-  public config(): void {
+  async config(): Promise<void> {
     const port = process.env.PORT || 3000;
-    const redisStoreSecret: any = process.env.REDIS_STORE_SECRET;
-    const redisStoreHost: any = process.env.REDIS_STORE_HOST;
-    const redisStorePort: any = process.env.REDIS_STORE_PORT || 6379;
-    const redisStoreTtl: any = process.env.REDIS_STORE_TTL || 260;
-    const redisStore = connectRedis(session);
-    const client  = redis.createClient();
 
-    this.app.use(session({
-      store: new redisStore({
-        host: redisStoreHost,
-        port: redisStorePort,
-        ttl: redisStoreTtl,
-        client: client
-      }),
-      secret: redisStoreSecret,
-      resave: false,
-      saveUninitialized: false
-    }))
+    // config redis session
+    await redisSession(this.app);
 
+    // config passport
     this.app.use(passport.initialize())
     this.app.use(passport.session())
 
     this.app.set('port', port);
-    this.app.use(express.json());
     this.app.use(cors(corsOptions));
-    this.app.use(express.urlencoded({extended: true}));
-    routes(this.app)
-    authentication.init();
+
+    // config body parse using express
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+
+    // setting the view engine
+    this.app.set('views', path.join(__dirname, 'views'));
+    // setting for the root path for views directory
+    this.app.set('view engine', 'ejs');
+
+    // add route
+    routes(this.app);
+
+    // init passport
+    authentication.initPassport();
   }
 
   public start(): void {
@@ -66,4 +61,4 @@ class Server {
 const server = new Server();
 server.start();
 
-export const collections: { manga?: mongoDB.Collection } = {}
+export const collections: { manga?: mongoDB.Collection, albumImgur?: mongoDB.Collection } = {}
