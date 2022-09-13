@@ -12,34 +12,42 @@ export default async (server: Application) => {
   const redisStore = connectRedis(session);
   const client  = redis.createClient({ name: redisName });
 
-  await client.connect()
-    .then(() => {
-      // Session data is stored server-redis-side
-      server.use(session({
-        store: new redisStore({
-          host: redisStoreHost,
-          port: redisStorePort,
-          ttl: redisStoreTtl,
-          client
-        }),
-        secret: redisStoreSecret,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-          secure: false,  // if true only transmit cookie over https
-          httpOnly: false, // if true prevent client side JS from reading the cookie
-          maxAge: 1000 * 60 * 10, // session max age in milliseconds
-        },
-      }))
+  // await client.connect()
+  //   .then(() => {
+  //     // Session data is stored server-redis-side
+  //     server.use(session({
+  //       store: new redisStore({
+  //         host: redisStoreHost,
+  //         port: redisStorePort,
+  //         ttl: redisStoreTtl,
+  //         client
+  //       }),
+  //       secret: redisStoreSecret,
+  //       resave: false,
+  //       saveUninitialized: false,
+  //       cookie: {
+  //         secure: false,  // if true only transmit cookie over https
+  //         httpOnly: false, // if true prevent client side JS from reading the cookie
+  //         maxAge: 1000 * 60 * 10, // session max age in milliseconds
+  //       },
+  //     }))
+  //   })
+  //   .catch(() => {
+  //     // Session data is stored server-side
+  //     server.use(
+  //       session({
+  //         secret: redisStoreSecret,
+  //         resave: false,
+  //         saveUninitialized: false,
+  //       })
+  //     );
+  //   });
+
+  server.use(
+    session({
+      secret: redisStoreSecret,
+      resave: false,
+      saveUninitialized: false,
     })
-    .catch(() => {
-      // Session data is stored server-side
-      server.use(
-        session({
-          secret: redisStoreSecret,
-          resave: false,
-          saveUninitialized: false,
-        })
-      );
-    });
+  );
 }

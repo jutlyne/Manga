@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:ts": "tsc -w",
-    "start:js": "nodemon build",
-    "start:ejs": "ts-node src/tools/copyAssets.ts",
+    "copy-asset": "ts-node src/tools/copyAssets.ts",
+    "start:js": "nodemon --watch src -e ejs --exec npm run copy-asset",
+    "start:build": "nodemon build",
     "start": "concurrently npm:start:*"
   },
   "repository": {
