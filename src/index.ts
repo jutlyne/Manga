@@ -6,7 +6,7 @@ import cors from 'cors';
 import { corsOptions, redisSession } from './config';
 import { connectToDatabase } from './database';
 import passport from 'passport';
-import * as authentication from './app/authenticate';
+import { initPassport, middleware } from './app/authenticate';
 import path from 'path';
 
 class Server {
@@ -39,11 +39,15 @@ class Server {
     // setting for the root path for views directory
     this.app.set('view engine', 'ejs');
 
+    // middleware user
+    const allowUrl: any = new Array('/home');
+    // this.app.use(middleware(allowUrl));
+
     // add route
     routes(this.app);
 
     // init passport
-    authentication.initPassport();
+    initPassport();
   }
 
   public start(): void {

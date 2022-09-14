@@ -1,7 +1,6 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import { Strategy } from 'passport-local';
-import authenticationMiddleware from './middleware';
 
 const saltRounds = 10
 const myPlaintextPassword = 'password'
@@ -21,8 +20,8 @@ function findUser (username: any, callback: any) {
   return callback(null)
 }
 
-passport.serializeUser(function (user: any, cb) {
-  cb(null, user?.username)
+passport.serializeUser(function (user: any, done) {
+  done(null, user?.username)
 })
 
 passport.deserializeUser(function (username, cb) {
@@ -54,8 +53,6 @@ function initPassport () {
       })
     }
   ))
-
-  passport.authenticate = authenticationMiddleware
 }
 
 export default initPassport;
