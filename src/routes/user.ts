@@ -28,6 +28,7 @@ export default class apiRoutes {
         successRedirect: '/',
       }),
       (req: Request, res: Response) => {}
-    )
+    );
+    this.router.get('/logout', ensureLoggedIn(), this.controller.logout);
   }
 }
