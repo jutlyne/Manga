@@ -6,12 +6,13 @@ export class userController {
   }
 
   async homePage(req: Request, res: Response) {
-    console.log(req);
+    let dateNow: number = Number(new Date());
+    let cookieExpresAt: any = req.session?.cookie?.expires || null;
+    let dateCookieExpires: number = Number(new Date(cookieExpresAt));
 
     res.render('home', {
       sessionID: req.sessionID,
-      sessionExpireTime: 12312312,
-      // sessionExpireTime: new Date(req.session.cookie.expires) - new Date(),
+      sessionExpireTime: dateCookieExpires - dateNow,
       isAuthenticated: req.isAuthenticated(),
       user: req.user,
     })

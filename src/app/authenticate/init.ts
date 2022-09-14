@@ -1,7 +1,6 @@
 import passport from 'passport';
 import bcrypt from 'bcrypt';
 import { Strategy } from 'passport-local';
-import authenticationMiddleware from './middleware';
 
 const saltRounds = 10
 const myPlaintextPassword = 'password'
@@ -54,8 +53,6 @@ function initPassport () {
       })
     }
   ))
-
-  passport.authenticate = authenticationMiddleware
 }
 
 export default initPassport;
