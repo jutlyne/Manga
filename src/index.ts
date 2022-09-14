@@ -8,7 +8,6 @@ import { connectToDatabase } from './database';
 import passport from 'passport';
 import { initPassport, middleware } from './app/authenticate';
 import path from 'path';
-import { AlbumData } from 'imgur/lib/common/types';
 
 class Server {
   public app: express.Application;
