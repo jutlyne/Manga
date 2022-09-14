@@ -3,7 +3,7 @@ import multer from 'multer';
 import { login as validationLogin } from '../validator';
 import passport from 'passport';
 import { userController } from '../users';
-import { ensureLoggedIn } from 'connect-ensure-login'
+import { ensureLoggedIn, ensureLoggedOut } from 'connect-ensure-login'
 
 export default class apiRoutes {
   public router: Router;
@@ -18,7 +18,7 @@ export default class apiRoutes {
 
   protected registerRoutes(): void {
     this.router.get('/', ensureLoggedIn(), this.controller.homePage);
-    this.router.get('/login', this.controller.login);
+    this.router.get('/login', ensureLoggedOut(), this.controller.login);
     this.router.post(
       '/login',
       this.formData.none(),
