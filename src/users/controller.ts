@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import { mutipleMongooseToOject } from "../util";
 import { collections } from '..';
-import { Manga } from "src/database";
 
 export class userController {
   async login(req: Request, res: Response) {
