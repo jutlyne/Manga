@@ -16,7 +16,19 @@ export class userController {
   }
 
   async homePage(req: Request, res: Response) {
-    const manga = (await collections?.manga?.find({}).toArray()) as any;
+    // https://www.npmjs.com/package/mongoose-paginate-v2
+    let perPage = 12;
+    let page: any = req.query?.page;
+    let currentPage = Math.max(0, page);
+    let skipPage = perPage * currentPage;
+
+    const manga = (
+      await collections?.manga
+        ?.find({})
+        .limit(perPage)
+        .skip(skipPage)
+        .toArray()
+    ) as any;
 
     return res.render('home', {
       manga: manga

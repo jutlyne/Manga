@@ -17,7 +17,7 @@ export default class apiRoutes {
   }
 
   protected registerRoutes(): void {
-    this.router.get('/', ensureLoggedIn(), this.controller.homePage);
+    this.router.get('/', ensureLoggedIn(), this.formData.none(), this.controller.homePage);
     this.router.get('/login', ensureLoggedOut(), this.controller.login);
     this.router.post(
       '/login',
