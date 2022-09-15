@@ -1,18 +1,15 @@
 <section>
     <!-- As a heading -->
     <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand">Navbar</a>
-        {{#if isAuthenticated}}
+    <div class="container-fluid justify-content-end">
         <a href="/logout" class="btn btn-danger btn-md">Logout</a>
-        {{/if}}
     </div>
     </nav>
     <div class="container">
         <section class="row mt-5">
             {{#each manga}}
                 <div class="card col-4 m-2" style="width: 18rem;">
-                    <img class="card-img-top" src="{{ image }}" alt="Card image cap">
+                    <img class="card-img-top" src={{ image }} alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{ name }}</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
