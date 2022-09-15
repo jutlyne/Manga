@@ -19,6 +19,10 @@ interface Manga {
 	rate?: string;
 }
 
+interface albumDataImgur extends AlbumData {
+  deletehash?: string;
+}
+
 class CrawlService {
   async *crawlListMangas(url: string) {
     const response = await axios.get(url);
@@ -102,10 +106,11 @@ class CrawlService {
       }
 
       const newAlbumImgur = await imgurClient.createAlbum(title);
-      const result = await collections?.albumImgur?.insertOne(newAlbumImgur?.data as AlbumData);
+      const albumImgurData: albumDataImgur = newAlbumImgur?.data;
+      const result = await collections?.albumImgur?.insertOne(albumImgurData);
 
       if (result) {
-        return newAlbumImgur?.data?.deletehash;
+        return albumImgurData.deletehash;
       }
 
     } catch (error: any) {

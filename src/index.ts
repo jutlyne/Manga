@@ -1,13 +1,14 @@
-import routes from './App';
-import * as http from 'http';
-import express from 'express';
-import * as mongoDB from 'mongodb';
-import cors from 'cors';
-import { corsOptions, redisSession } from './config';
-import { connectToDatabase } from './database';
-import passport from 'passport';
-import { initPassport, middleware } from './app/authenticate';
 import path from 'path';
+import cors from 'cors';
+import routes from './App';
+import express from 'express';
+import passport from 'passport';
+import { createServer } from 'http';
+import { engine } from 'express-handlebars';
+import { connectToDatabase } from './database';
+import { corsOptions, redisSession } from './config';
+import { Collection as mongoCollection } from 'mongodb';
+import { initPassport, middleware } from './app/authenticate';
 
 class Server {
   public app: express.Application;
@@ -35,12 +36,16 @@ class Server {
     this.app.use(express.urlencoded({ extended: true }));
 
     // setting the view engine
-    this.app.set('views', path.join(__dirname, 'views'));
+    this.app.engine('.hbs', engine({
+      extname: '.hbs',
+      partialsDir: path.join(__dirname, 'resources/views/layouts/partials')
+    }));
+    this.app.set('view engine', '.hbs');
     // setting for the root path for views directory
-    this.app.set('view engine', 'ejs');
+    this.app.set('views', path.join(__dirname, 'resources/views'));
 
     // middleware user
-    const allowUrl: any = new Array('/home');
+    // const allowUrl: any = new Array('/home');
     // this.app.use(middleware(allowUrl));
 
     // add route
@@ -53,7 +58,7 @@ class Server {
   public start(): void {
     connectToDatabase()
       .then(() => {
-        const server = http.createServer(this.app);
+        const server = createServer(this.app);
 
         server.listen(this.app.get('port'), () => {
           console.log('Server listening in port 3000');
@@ -65,4 +70,4 @@ class Server {
 const server = new Server();
 server.start();
 
-export const collections: { manga?: mongoDB.Collection, albumImgur?: mongoDB.Collection } = {}
+export const collections: { manga?: mongoCollection, albumImgur?: mongoCollection } = {}
