@@ -1,4 +1,5 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
+import { Manga } from 'src/database';
 import { collections } from '..';
 
 export class userController {
@@ -28,7 +29,7 @@ export class userController {
         .limit(perPage)
         .skip(skipPage)
         .toArray()
-    ) as any;
+    ) as Manga[];
 
     return res.render('home', {
       manga: manga
