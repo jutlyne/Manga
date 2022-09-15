@@ -19,6 +19,7 @@ export default class apiRoutes {
   protected registerRoutes(): void {
     this.router.get('/', ensureLoggedIn(), this.formData.none(), this.controller.homePage);
     this.router.get('/login', ensureLoggedOut(), this.controller.login);
+    this.router.get('/register', ensureLoggedOut(), this.controller.formRegister);
     this.router.post(
       '/login',
       this.formData.none(),
@@ -29,6 +30,12 @@ export default class apiRoutes {
       }),
       (req: Request, res: Response) => {}
     );
+    this.router.post(
+      '/register',
+      this.formData.none(),
+      validationLogin,
+      this.controller.register
+    )
     this.router.get('/logout', ensureLoggedIn(), this.controller.logout);
   }
 }

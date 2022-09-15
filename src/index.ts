@@ -70,4 +70,4 @@ class Server {
 const server = new Server();
 server.start();
 
-export const collections: { manga?: mongoCollection, albumImgur?: mongoCollection } = {}
+export const collections: { manga?: mongoCollection, albumImgur?: mongoCollection, user?: mongoCollection } = {}

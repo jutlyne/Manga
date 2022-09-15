@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { Manga } from 'src/database';
+import { Manga, User } from 'src/database';
 import { collections } from '..';
+import bcrypt from 'bcrypt';
 
 export class userController {
   async login(req: Request, res: Response) {
@@ -14,6 +15,27 @@ export class userController {
       }
       res.redirect('/');
     });
+  }
+
+  async formRegister(req: Request, res: Response) {
+    res.render('auth/register');
+  }
+
+  async register(req: Request, res: Response) {
+    const saltRounds = 10;
+    const myPlaintextPassword = req.body.password;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const passwordHash = bcrypt.hashSync(myPlaintextPassword, salt);
+    const newUser = {
+      username: req.body?.username,
+      password: passwordHash
+    } as User;
+
+    const result = await collections?.user?.insertOne(newUser);
+
+    result
+      ? res.redirect('/login')
+      : res.redirect('/register')
   }
 
   async homePage(req: Request, res: Response) {
