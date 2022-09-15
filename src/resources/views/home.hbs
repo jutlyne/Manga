@@ -1,0 +1,17 @@
+<section>
+    <!-- As a heading -->
+    <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand">Navbar</a>
+        {{#if isAuthenticated}}
+        <a href="/logout" class="btn btn-danger btn-md">Logout</a>
+        {{/if}}
+    </div>
+    </nav>
+    <div class="">
+    <p class="center">
+        Welcome: <b>{{ user.username }}</b> your sessionID is <b>{{sessionID}}</b>
+    </p>
+    <p>Your session expires in <b>{{ sessionExpireTime }}</b> seconds</p>
+    </div>
+</section>
