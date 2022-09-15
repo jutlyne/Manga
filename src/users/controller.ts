@@ -1,4 +1,7 @@
 import { Request, Response } from "express";
+import { mutipleMongooseToOject } from "../util";
+import { collections } from '..';
+import { Manga } from "src/database";
 
 export class userController {
   async login(req: Request, res: Response) {
@@ -15,15 +18,10 @@ export class userController {
   }
 
   async homePage(req: Request, res: Response) {
-    let dateNow: number = Number(new Date());
-    let cookieExpresAt: any = req.session?.cookie?.expires || null;
-    let dateCookieExpires: number = Number(new Date(cookieExpresAt));
+    const manga = (await collections?.manga?.find({}).toArray()) as any;
 
-    res.render('home', {
-      sessionID: req.sessionID,
-      sessionExpireTime: dateCookieExpires - dateNow,
-      isAuthenticated: req.isAuthenticated(),
-      user: req.user,
+    return res.render('home', {
+      manga: manga
     })
   }
 }

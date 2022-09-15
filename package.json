@@ -8,7 +8,7 @@
     "start:ts": "tsc -w",
     "copy-asset": "ts-node src/tools/copyAssets.ts",
     "start:hbs": "nodemon --watch src -e hbs --exec npm run copy-asset",
-    "start:js": "nodemon build",
+    "start:js": "nodemon --inspect build",
     "start": "concurrently npm:start:*"
   },
   "repository": {
