@@ -1,5 +1,6 @@
 import Manga from './manga';
 import AlbumImgur from './album';
+import User from './user';
 import { connectToDatabase } from './database';
 
-export { Manga, AlbumImgur, connectToDatabase };
+export { User, Manga, AlbumImgur, connectToDatabase };

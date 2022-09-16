@@ -1,22 +1,18 @@
-import passport from 'passport';
 import bcrypt from 'bcrypt';
+import passport from 'passport';
+import { collections } from '../../';
 import { Strategy } from 'passport-local';
+import { User } from 'src/database';
 
-const saltRounds = 10
-const myPlaintextPassword = 'password'
-const salt = bcrypt.genSaltSync(saltRounds)
-const passwordHash = bcrypt.hashSync(myPlaintextPassword, salt)
+async function findUser (username: any, callback: any) {
+  const userExits = (await collections?.user?.findOne({
+    username: username
+  })) as User | undefined;
 
-const user = {
-  username: 'username',
-  passwordHash,
-  id: 1
-}
-
-function findUser (username: any, callback: any) {
-  if (username === user.username) {
-    return callback(null, user)
+  if (userExits) {
+    return callback(null, userExits)
   }
+
   return callback(null)
 }
 
@@ -29,25 +25,31 @@ passport.deserializeUser(function (username, cb) {
 })
 
 function initPassport () {
-  passport.use(new Strategy(
-    (username, password, done) => {
+  passport.use(new Strategy({
+      passReqToCallback: true,
+    },
+    (req, username, password, done) => {
+      req.flash('message', 'User not found')
+
       findUser(username, (err: any, user: any) => {
         if (err) {
           return done(err)
         }
 
         if (!user) {
-          console.log('User not found')
-          return done(null, false)
+          req.flash('message', 'User not found')
+          return done(null, false, req.flash('error', 'User not found'))
         }
 
-        bcrypt.compare(password, user.passwordHash, (err, isValid) => {
+        bcrypt.compare(password, user.password, (err, isValid) => {
           if (err) {
             return done(err)
           }
+
           if (!isValid) {
-            return done(null, false)
+            return done(null, false, req.flash('error', 'Incorrect password'))
           }
+
           return done(null, user)
         })
       })

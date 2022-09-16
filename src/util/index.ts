@@ -1,6 +1,6 @@
 import { mutipleMongooseToOject, mongooseToOject } from './mongoose'
 
-export = {
+export {
   mutipleMongooseToOject,
   mongooseToOject
 }

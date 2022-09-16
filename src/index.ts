@@ -3,6 +3,7 @@ import cors from 'cors';
 import routes from './App';
 import express from 'express';
 import passport from 'passport';
+import flash from 'connect-flash';
 import { createServer } from 'http';
 import { engine } from 'express-handlebars';
 import { connectToDatabase } from './database';
@@ -44,6 +45,9 @@ class Server {
     // setting for the root path for views directory
     this.app.set('views', path.join(__dirname, 'resources/views'));
 
+    this.app.use(flash());
+    this.app.use(express.static(path.join(__dirname, 'public')));
+
     // middleware user
     // const allowUrl: any = new Array('/home');
     // this.app.use(middleware(allowUrl));
@@ -70,4 +74,4 @@ class Server {
 const server = new Server();
 server.start();
 
-export const collections: { manga?: mongoCollection, albumImgur?: mongoCollection } = {}
+export const collections: { manga?: mongoCollection, albumImgur?: mongoCollection, user?: mongoCollection } = {}
