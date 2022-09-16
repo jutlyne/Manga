@@ -23,12 +23,25 @@ export class userController {
   }
 
   async formRegister(req: Request, res: Response) {
+    const error = req.flash().error || [];
+
     res.render('auth/register', {
       layout: 'auth',
+      error: error,
     });
   }
 
   async register(req: Request, res: Response) {
+    const query = { username: req.body?.username };
+
+    const user = (await collections?.user?.findOne(query)) as User | undefined;
+
+    if (user) {
+      req.flash('error', 'User already exists!');
+
+      return res.redirect('/register');
+    }
+
     const saltRounds = 10;
     const myPlaintextPassword = req.body.password;
     const salt = bcrypt.genSaltSync(saltRounds);

@@ -29,16 +29,13 @@ function initPassport () {
       passReqToCallback: true,
     },
     (req, username, password, done) => {
-      req.flash('message', 'User not found')
-
       findUser(username, (err: any, user: any) => {
         if (err) {
           return done(err)
         }
 
         if (!user) {
-          req.flash('message', 'User not found')
-          return done(null, false, req.flash('error', 'User not found'))
+          return done(null, false, { message: 'User not found' })
         }
 
         bcrypt.compare(password, user.password, (err, isValid) => {
@@ -47,7 +44,7 @@ function initPassport () {
           }
 
           if (!isValid) {
-            return done(null, false, req.flash('error', 'Incorrect password'))
+            return done(null, false, { message: 'Incorrect password' })
           }
 
           return done(null, user)
