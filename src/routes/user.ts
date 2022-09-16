@@ -27,6 +27,7 @@ export default class apiRoutes {
       passport.authenticate('local', {
         failureRedirect: '/login',
         successRedirect: '/',
+        failureFlash: true,
       }),
       (req: Request, res: Response) => {}
     );
