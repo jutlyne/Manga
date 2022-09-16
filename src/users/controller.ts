@@ -1,11 +1,16 @@
-import { Request, Response } from 'express';
-import { Manga, User } from 'src/database';
-import { collections } from '..';
 import bcrypt from 'bcrypt';
+import { collections } from '..';
+import { Manga, User } from 'src/database';
+import { Request, Response } from 'express';
 
 export class userController {
   async login(req: Request, res: Response) {
-    res.render('auth/login');
+    const error = req.flash().error || [];
+
+    res.render('auth/login', {
+      layout: 'auth',
+      error: error
+    });
   }
 
   async logout(req: Request, res: Response) {
@@ -18,7 +23,9 @@ export class userController {
   }
 
   async formRegister(req: Request, res: Response) {
-    res.render('auth/register');
+    res.render('auth/register', {
+      layout: 'auth',
+    });
   }
 
   async register(req: Request, res: Response) {

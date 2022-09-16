@@ -3,6 +3,7 @@ import cors from 'cors';
 import routes from './App';
 import express from 'express';
 import passport from 'passport';
+import flash from 'connect-flash';
 import { createServer } from 'http';
 import { engine } from 'express-handlebars';
 import { connectToDatabase } from './database';
@@ -43,6 +44,9 @@ class Server {
     this.app.set('view engine', '.hbs');
     // setting for the root path for views directory
     this.app.set('views', path.join(__dirname, 'resources/views'));
+
+    this.app.use(flash());
+    this.app.use(express.static(path.join(__dirname, 'public')));
 
     // middleware user
     // const allowUrl: any = new Array('/home');

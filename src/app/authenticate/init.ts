@@ -25,16 +25,20 @@ passport.deserializeUser(function (username, cb) {
 })
 
 function initPassport () {
-  passport.use(new Strategy(
-    (username, password, done) => {
+  passport.use(new Strategy({
+      passReqToCallback: true,
+    },
+    (req, username, password, done) => {
+      req.flash('message', 'User not found')
+
       findUser(username, (err: any, user: any) => {
         if (err) {
           return done(err)
         }
 
         if (!user) {
-          console.log('User not found')
-          return done(null, false)
+          req.flash('message', 'User not found')
+          return done(null, false, req.flash('error', 'User not found'))
         }
 
         bcrypt.compare(password, user.password, (err, isValid) => {
@@ -43,7 +47,7 @@ function initPassport () {
           }
 
           if (!isValid) {
-            return done(null, false)
+            return done(null, false, req.flash('error', 'Incorrect password'))
           }
 
           return done(null, user)
